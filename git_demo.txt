@@ -1,9 +1,0 @@
-git config --global user.name "prasad pawar"
-pbcopy <~/.ssh/id_ed25519.pub
-
-ssh-add ~/.ssh/Devops_24
-
-
-
---ssh key
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILYx7MJjVjGqCXbs9WDs5lv4DDy83ValSW36lHZQrDA0 prasadpawar192@gmail.com
