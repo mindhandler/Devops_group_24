@@ -1,0 +1,75 @@
+###############################
+Author: SATISH M. BIRHADE
+PRN: 220344525040
+Group No: 24
+Date of Creation: 11-09-2022
+###############################
+
+=============================================================================================================================================================================================
+
+Question-1)
+Pivot the Occupation column in OCCUPATIONS so that each Name is sorted alphabetically and displayed underneath its corresponding Occupation. The output column headers should
+be Doctor, Professor, Singer, and Actor, respectively.
+
+Ans:-
+
+select Doctor, Professor, Singer, Actor from (select ROW_NUMBER() over (partition by occupation order by name) as rn, name, occupation from occupations) 
+pivot 
+(max(name) for occupation in ('Doctor' as Doctor,'Professor' as Professor, 'Singer' as Singer, 'Actor' as Actor)) order by rn;
+
+=============================================================================================================================================================================================
+
+Question-2)
+Amber's conglomerate corporation just acquired some new companies. Each of the companies follows this hierarchy:
+
+Ans:-
+
+select c.company_code, c.founder,
+count(distinct l.lead_manager_code),
+count(distinct s.senior_manager_code),
+count(distinct m.manager_code),
+count(distinct e.employee_code)
+from Company as c 
+join Lead_Manager as l 
+on c.company_code = l.company_code
+join Senior_Manager as s
+on l.lead_manager_code = s.lead_manager_code
+join Manager as m 
+on m.senior_manager_code = s.senior_manager_code
+join Employee as e
+on e.manager_code = m.manager_code
+group by c.company_code, c.founder
+order by c.company_code;
+
+==============================================================================================================================================================================================
+
+Question-3)
+You are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. It is guaranteed that the difference between the End_Date and the 
+Start_Date is equal to 1 day for each row in the table.
+
+Ans:-
+
+select Start_Date, min(End_Date)
+from 
+(select Start_Date from Projects where Start_Date not in (select End_Date from Projects)) a ,
+(select End_Date from Projects where End_Date not in (select Start_Date from Projects)) b
+where Start_Date < End_Date
+group by Start_Date
+order by datediff(min(End_Date), Start_Date) asc, Start_Date asc;
+
+=============================================================================================================================================================================================
+
+Question-4)
+You are given a table, Functions, containing two columns: X and Y.
+Two pairs (X1, Y1) and (X1, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
+Write a query to output all such symmetric pairs in ascending order by the value of X.
+
+Ans:-
+
+select f1.X, f1.Y from functions as f1 
+where f1.X = f1.Y and (select count(*) from functions where X = f1.X and Y = f1.Y) > 1
+union
+select f1.X, f1.Y from functions as f1
+where exists(select X, Y from functions where f1.X = Y and f1.Y = X and f1.X < X) order by X;
+
+=============================================================================================================================================================================================
